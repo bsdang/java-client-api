@@ -66,5 +66,36 @@ public class TextDocumentTest {
 		File file = docMgr.read(docId, new FileHandle()).get();
 		assertEquals("Text document mismatch with file",text.length(),file.length());
 	}
+	
+	@Test
+	public void testByteLength() throws IOException {
+		String docId = "/test/testWrite1.txt";
+		String text  = "A simple text document";
 
+		TextDocumentManager docMgr = Common.client.newTextDocumentManager();
+		docMgr.write(docId, new StringHandle().with(text));
+		assertEquals("Text document write difference",text,docMgr.read(docId, new StringHandle()).get());
+
+		BytesHandle bytesHandle = new BytesHandle();
+		docMgr.read(docId, bytesHandle);
+		assertEquals("Text document mismatch reading bytes", bytesHandle.get().length,text.length());
+
+		InputStreamHandle inputStreamHandle = new InputStreamHandle();
+		docMgr.read(docId, inputStreamHandle);
+		byte[] b = Common.streamToBytes(inputStreamHandle.get());
+		assertEquals("Text document mismatch reading input stream",new String(b),text);
+
+		Reader reader = docMgr.read(docId, new ReaderHandle()).get();
+		String s = Common.readerToString(reader);
+		assertEquals("Text document mismatch with reader",s,text);
+
+		File file = docMgr.read(docId, new FileHandle()).get();
+		assertEquals("Text document mismatch with file",text.length(),file.length());
+		
+		DocumentDescriptor desc = docMgr.exists(docId);
+		assertTrue("Text exists did not get number of bytes",
+				desc.getByteLength() != DocumentDescriptor.UNKNOWN_LENGTH);
+		assertEquals("Text exists got wrong number of bytes",text.length(), desc.getByteLength());
+
+	}
 }
