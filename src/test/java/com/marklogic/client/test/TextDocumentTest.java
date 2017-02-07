@@ -16,6 +16,7 @@
 package com.marklogic.client.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.marklogic.client.document.DocumentDescriptor;
 import com.marklogic.client.document.TextDocumentManager;
 import com.marklogic.client.io.BytesHandle;
 import com.marklogic.client.io.FileHandle;
